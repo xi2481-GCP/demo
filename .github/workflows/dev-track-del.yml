@@ -1,15 +1,15 @@
 ##############################################################################
 # Instruqt Github Actions Workflow
 #
-# This workflow will convert the provided track-slug into a DEV variant
+# This workflow will delete the a DEV track
 #
 ##############################################################################
-name: Convert-Dev-Track
+name: Delete Dev-Track
 
 env:
   INSTRUQT_TOKEN: ${{ secrets.INSTRUQT_TOKEN }}
   TRACK_DIR: instruqt-tracks
-  
+
 concurrency:
   group: ${{ github.head_ref || github.run_id }}
   cancel-in-progress: true
@@ -26,30 +26,28 @@ on:
       - '!master'
 
 jobs:
-  CreateDevTrack:
+  DeleteDevtrack:
     runs-on: ubuntu-latest
     steps:
 
       - name: Check out repository code
         uses: actions/checkout@v3
 
-      - name: Create dev track
-        uses: ./.github/actions/track-dev
+      - name: Update file permissions
+        run: sudo chmod -R a+rwx ${{ env.TRACK_DIR }}/${{ inputs.slug }}-dev
+
+      - name: Delete dev track
+        uses: ./.github/actions/track-delete
         with:
-          path: ${{ env.TRACK_DIR }}/${{ inputs.slug }}
+          path: ${{ env.TRACK_DIR }}/${{ inputs.slug }}-dev
       
-      - name: Copy Track
-        run: |
-          mkdir -p ${{ env.TRACK_DIR }}/${{ inputs.slug }}-dev
-          cd ${{ env.TRACK_DIR }}
-          cp -R ${{ inputs.slug }}/. ${{ inputs.slug }}-dev
-
-      - name: Push dev tracks
-        uses: ./.github/actions/track-push
+      - name: Delete dev dir
+        uses: JesseTG/rm@v1.0.3
         with:
-          path: ${{ env.TRACK_DIR }}/${{ inputs.slug }}
-
+          path: ${{ env.TRACK_DIR }}/${{ inputs.slug }}-dev
+          
       - name: Commit Changes
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
-          commit_message: Creating dev version of ${{ inputs.slug }}
+          commit_message: Deleting the dev version of ${{ inputs.slug }}-dev
+
