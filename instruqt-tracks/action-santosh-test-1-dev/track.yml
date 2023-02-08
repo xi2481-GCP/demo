@@ -1,5 +1,4 @@
 slug: action-santosh-test-1-dev
-id: u3nzern8nbdt
 title: DEV - action-santosh-Test-1
 teaser: Use a virtual machine (VM) as a sandbox host
 description: |-
@@ -13,9 +12,9 @@ description: |-
     - Add simple assets (a Dockerfile) to the sandbox host
 icon: https://cdn.instruqt.com/assets/templates/docker.png
 tags:
-- dev
+  - dev
 owner: instruqt-support
 developers:
-- santosh@instruqt.com
+  - santosh@instruqt.com
+checksum: "16910883642467416779"
 maintenance: true
-checksum: "1342539984016405977"
